@@ -12,18 +12,6 @@ class AuthScreenState extends State<AuthScreen> {
   final Color? corTextoEspecial = Colors.blue[700];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Adiciona a chave global para o formulário
 
-  String? validarEmail(String? entrada) {
-    return null;
-  }
-
-  String? validarSenha(String? entrada) {
-    return null;
-  }
-
-  String? validarUsername(String? entrada) {
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,10 +50,15 @@ class AuthScreenState extends State<AuthScreen> {
                   if (value == null || value.isEmpty) {
                     return "A senha não pode estar vazia";
                   }
-                  // final regex = RegExp(r"[A-za-z0-9]+");
-                  // if(regex.hasMatch(value)){
-                  //   return "Formato de senha inválido, deve conter letras minusculas, maiusculas e números";
-                  // }
+                  final regex = RegExp(r'^[a-zA-Z]{6,20}$');
+                  if(!regex.hasMatch(value)){
+                    const min = 6;
+                    const max = 20;
+                    if(value.length < min || value.length > max) {
+                      return "A senha deve ter de $min  a $max caracteres";
+                    }
+                    return "Formato de senha inválida, digite apenas letras maiúsculas ou minúsculas";
+                  }
                   return null;
                 },
               ),
