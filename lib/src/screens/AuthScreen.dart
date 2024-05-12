@@ -1,4 +1,7 @@
+import '../views/item_list_view.dart';
+
 import 'package:flutter/material.dart';
+
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -75,6 +78,11 @@ class AuthScreenState extends State<AuthScreen> {
                   if (_formKey.currentState!.validate()) {
                     // Faça algo se a validação for bem-sucedida
                     print("Formulário válido");
+              
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ItemListView()),
+                    );
                   }
                 },
                 child: Text(
