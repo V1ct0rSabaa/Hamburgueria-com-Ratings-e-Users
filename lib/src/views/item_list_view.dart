@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
-
 import '../settings/settings_view.dart';
 import '../models/item.dart';
 import 'item_details_view.dart';
 
 class ItemListView extends StatelessWidget {
-  const ItemListView({
-    super.key,
-    this.items = const [
-      Item(id: 1, 
-          nome:  "Viking Burguer",
-          nota: 4.2, 
-          valorMedio:  "*", 
-          endereco:  "", 
-          contato: ""), 
-      Item(id: 2,
-        nome: "Samurai Burguer e e Sushi",
+    static const lista = [
+      Item(id: 1,
+        nome: "Viking Burguer",
         nota:  2.1,
         valorMedio:  "**",
-        endereco:  "",
-        contato:  ""), 
-      Item(id: 3,
+        endereco:  "Rua das Válquirias, 1876",
+        contato:  "42462098"),
+      Item(id: 2,
         nome: "Cavaleiro Burguer e Pizza",
         nota:  3.5,
-        valorMedio:  "*",
-        endereco:  "baker street 221b",
-        contato:  ""),
+        valorMedio:  "**",
+        endereco:  "Rua dos padeiros, 221b",
+        contato:  "37037436"),
+      Item(id: 3,
+        nome: "Samurai Burguer e Sushi",
+        nota:  2.1,
+        valorMedio:  "**",
+        endereco:  "Rua Djavan Viera, 450",
+        contato:  "18793090"),
       Item(id: 4,
         nome:  "Hussardo Burguer",
         nota:  1.7,
         valorMedio:  "****",
-        endereco:  "",
-        contato:  "")
-      ]
-  });
+        endereco:  "Travessa Kowalski 1830",
+        contato:  "31128354")
+  ];    
+  // json.decode("mock.json")["mockHamburguerias";] as List<Map<String, dynamic>>.map((elemento) => Item.fromMap(elemento)) as List<Item>;
+  const ItemListView({ super.key, this.items = lista });
 
   static const routeName = '/lista';
 
@@ -44,9 +42,9 @@ class ItemListView extends StatelessWidget {
         restorationId: 'sampleItemListView',
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
-          final item = items[index];
-          const double maximoRating = 5.0;
-          final textoItem = """${item.nome}. Avaliação (${item.nota} / $maximoRating). Valor Médio: ${item.valorMedio}""";
+          final itemAtual = items[index];
+          const double maxRating = 5.0;
+          final textoItem = """${itemAtual.nome}. Avaliação (${itemAtual.nota} / $maxRating). Valor Médio: ${itemAtual.valorMedio}""";
           const Color corTexto = Color.fromARGB(255, 70,130,180);
           return ListTile(
             title: Card.filled(shape: const RoundedRectangleBorder(),
@@ -56,7 +54,9 @@ class ItemListView extends StatelessWidget {
               foregroundImage: AssetImage('assets/images/hamb1.png')
             ),
             onTap: () {
-              Navigator.restorablePushNamed(context,ItemDetailsView.routeName,);
+              // Navigator.restorablePushNamed(context, ItemDetailsView.routeName, item);
+              Navigator.push(context, 
+              MaterialPageRoute(builder: (context) => ItemDetailsView(item: itemAtual)));
             }
           );
         },
@@ -65,7 +65,7 @@ class ItemListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String nomeLista = "Hamburguerias";
+    const nomeLista = "Hamburguerias";
     return Scaffold(
         appBar: AppBar(
         title: const Text(nomeLista),

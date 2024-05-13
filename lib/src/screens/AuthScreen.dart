@@ -15,7 +15,7 @@ class AuthScreenState extends State<AuthScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool jaCadastrou = true;
+  bool jaCadastrou = false;
   final Color? corTextoEspecial = Colors.blue[700];
   
   @override

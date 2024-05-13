@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
                    case SettingsView.routeName:
                      return SettingsView(controller: settingsController);
                    case ItemDetailsView.routeName:
-                     return const ItemDetailsView();
+                     return ItemDetailsView(item: ItemListView.lista[0]); // construtor exige um Item
                    case ItemListView.routeName:
                      return const ItemListView();
                    default:
