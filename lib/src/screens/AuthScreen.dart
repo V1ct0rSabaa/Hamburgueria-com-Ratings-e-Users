@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
+import '../settings/user_manager.dart';
+import '../settings/web_user_manager.dart';  // Importando o novo WebUserManager
 import '../views/item_list_view.dart';
-
 import 'package:flutter/material.dart';
-
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -11,10 +12,12 @@ class AuthScreen extends StatefulWidget {
 }
 
 class AuthScreenState extends State<AuthScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool jaCadastrou = true;
   final Color? corTextoEspecial = Colors.blue[700];
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Adiciona a chave global para o formulário
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,8 +31,9 @@ class AuthScreenState extends State<AuthScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
+                controller: emailController,
                 showCursor: true,
-                decoration: const InputDecoration(label: Text("email")),
+                decoration: const InputDecoration(labelText: ("email")),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return "O email não pode estar vázio!";
@@ -46,9 +50,10 @@ class AuthScreenState extends State<AuthScreen> {
                 },
               ),
               TextFormField(
+                controller: passwordController,
                 showCursor: true,
                 obscureText: true,
-                decoration: const InputDecoration(label: Text("senha")),
+                decoration: const InputDecoration(labelText: ("senha")),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return "A senha não pode estar vazia";
@@ -65,44 +70,49 @@ class AuthScreenState extends State<AuthScreen> {
                   return null;
                 },
               ),
-              Visibility(
+              /*Visibility(
                 visible: jaCadastrou,
                 child: TextFormField(
                   decoration: const InputDecoration(label: Text("username")),
                 ),
-              ),
+              ),*/
               const SizedBox(height: 32),
               ElevatedButton(
-                onPressed: () {
-                  // Valida o formulário ao pressionar o botão
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // Faça algo se a validação for bem-sucedida
-                    print("Formulário válido");
-              
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ItemListView()),
-                    );
+                            dynamic userManager;
+                            if (kIsWeb) {
+                              userManager = WebUserManager();  // Usa o gerenciador de usuários da web
+                            } else {
+                              userManager = UserManager();  // Usa o gerenciador de usuários tradicional
+                            }
+                    Map<String, dynamic> newUser = {
+                      'email': emailController.text,
+                      'password': passwordController.text
+                    };
+                    if (jaCadastrou) {
+                      List<dynamic> users = await userManager.readUsers();
+                      bool userExists = users.any((user) => user['email'] == newUser['email'] && user['password'] == newUser['password']);
+                      if (userExists) {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ItemListView()));
+                      } else {
+                        print("Usuário não encontrado");
+                      }
+                    } else {
+                      await userManager.writeUser(newUser);
+                      print("Usuário cadastrado com sucesso");
+                    }
                   }
                 },
-                child: Text(
-                  (jaCadastrou) ? "Fazer Login" : "Criar Conta",
-                  style: TextStyle(fontSize: 15, color: corTextoEspecial),
-                ),
+                child: Text((jaCadastrou) ? "Login" : "Registrar"),
               ),
-              const Divider(),
               TextButton(
                 onPressed: () {
                   setState(() {
                     jaCadastrou = !jaCadastrou;
                   });
                 },
-                child: Text(
-                  (jaCadastrou)
-                      ? "Ainda não tem uma conta? Cadastre-se!"
-                      : "Já tenho conta, quero fazer login.",
-                  style: TextStyle(fontSize: 15, color: corTextoEspecial),
-                ),
+                child: Text(jaCadastrou ? "Registrar" : "Login"),
               ),
             ],
           ),
