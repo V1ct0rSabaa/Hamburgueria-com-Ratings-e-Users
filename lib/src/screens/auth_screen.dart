@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../settings/user_manager.dart';
 import '../settings/web_user_manager.dart';  // Importando o novo WebUserManager
-import '../views/item_list_view.dart';
+import 'item_list_view.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatefulWidget {
