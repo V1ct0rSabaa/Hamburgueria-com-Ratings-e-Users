@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "258206322774",
+    "project_id": "ratinghamburgueria",
+    "storage_bucket": "ratinghamburgueria.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258206322774:android:1af115d53734679e726bf7",
+        "android_client_info": {
+          "package_name": "com.example.hamburgueria"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGV8dxpk0p_rbrgO62-2EGKC0xapzqawM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
