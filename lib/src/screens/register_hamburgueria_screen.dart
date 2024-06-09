@@ -4,10 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterHamburgueriaScreen extends StatefulWidget {
   @override
-  _RegisterHamburgueriaScreenState createState() => _RegisterHamburgueriaScreenState();
+  _RegisterHamburgueriaScreenState createState() =>
+      _RegisterHamburgueriaScreenState();
 }
 
-class _RegisterHamburgueriaScreenState extends State<RegisterHamburgueriaScreen> {
+class _RegisterHamburgueriaScreenState
+    extends State<RegisterHamburgueriaScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -16,7 +18,8 @@ class _RegisterHamburgueriaScreenState extends State<RegisterHamburgueriaScreen>
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
   final TextEditingController _ratingController = TextEditingController();
-  final CollectionReference hamburguerias = FirebaseFirestore.instance.collection('hamburguerias');
+  final CollectionReference hamburguerias =
+      FirebaseFirestore.instance.collection('hamburguerias');
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   List<Map<String, String>> _comments = [];
@@ -25,14 +28,20 @@ class _RegisterHamburgueriaScreenState extends State<RegisterHamburgueriaScreen>
     if (_formKey.currentState!.validate()) {
       // Verificar se o usuário está autenticado
       if (_auth.currentUser == null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Você precisa estar autenticado para registrar uma nova hamburgueria.')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                'Você precisa estar autenticado para registrar uma nova hamburgueria.')));
         return;
       }
 
       // Verificar se já existe uma hamburgueria com o mesmo nome
-      QuerySnapshot querySnapshot = await hamburguerias.where('name', isEqualTo: _nameController.text).get();
+      QuerySnapshot querySnapshot = await hamburguerias
+          .where('name', isEqualTo: _nameController.text)
+          .get();
       if (querySnapshot.docs.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Já existe uma hamburgueria registrada com esse nome.')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content:
+                Text('Já existe uma hamburgueria registrada com esse nome.')));
         return;
       }
 
@@ -47,13 +56,16 @@ class _RegisterHamburgueriaScreenState extends State<RegisterHamburgueriaScreen>
         'comments': _comments,
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Hamburgueria registrada com sucesso.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Hamburgueria registrada com sucesso.')));
       Navigator.pop(context);
     }
   }
 
+  // sprint 4 registrar hamburgueria
   void _addComment() {
-    if (_commentController.text.isNotEmpty) {
+    if (_commentController.text.isNotEmpty &&
+        _ratingController.text.isNotEmpty) {
       setState(() {
         _comments.add({
           'user': _auth.currentUser?.email ?? 'Anônimo',
@@ -144,6 +156,7 @@ class _RegisterHamburgueriaScreenState extends State<RegisterHamburgueriaScreen>
                   return null;
                 },
               ),
+
               SizedBox(height: 20),
               Text('Comentários:'),
               ..._comments.map((comment) {
@@ -152,6 +165,7 @@ class _RegisterHamburgueriaScreenState extends State<RegisterHamburgueriaScreen>
                   subtitle: Text(comment['comment'] ?? ''),
                 );
               }).toList(),
+              // sprint 4 adicionar comentário
               TextFormField(
                 controller: _commentController,
                 decoration: InputDecoration(labelText: 'Adicionar Comentário'),

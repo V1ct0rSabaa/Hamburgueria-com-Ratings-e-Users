@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/src/models/item.dart';
+import '../item.dart';
 import 'item_details_view.dart';
 import 'register_hamburgueria_screen.dart';
 
 class ItemListView extends StatelessWidget {
-   // Altere o nome da coleção para corresponder ao nome da sua coleção no Firestore
-  final CollectionReference itemsCollection = FirebaseFirestore.instance.collection('hamburguerias');
-
-
+  // Altere o nome da coleção para corresponder ao nome da sua coleção no Firestore
+  final CollectionReference itemsCollection =
+      FirebaseFirestore.instance.collection('hamburguerias');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hamburguerias'),
+        backgroundColor: Colors.orange[400],
+        title: const Text(
+          'Hamburguerias', textAlign: TextAlign.center,
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => RegisterHamburgueriaScreen()),
+                MaterialPageRoute(
+                    builder: (context) => RegisterHamburgueriaScreen()),
               );
             },
           ),
@@ -43,7 +46,8 @@ class ItemListView extends StatelessWidget {
               Item item = Item.fromFirestore(data.docs[index]);
               return ListTile(
                 title: Text(item.name),
-                subtitle: Text('Nota: ${item.rating}, Valor: R\$${item.value.toStringAsFixed(2)}'),
+                subtitle: Text(
+                    'Nota: ${item.rating}, Valor: R\$${item.value.toStringAsFixed(2)}'),
                 onTap: () {
                   Navigator.push(
                     context,
